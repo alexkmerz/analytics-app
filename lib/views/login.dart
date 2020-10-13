@@ -32,50 +32,53 @@ class LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Form(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              TextFormField(
-                controller: emailController,
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please enter your email';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: passwordController,
-                obscureText: true,
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please enter your password';
-                  }
-                  return null;
-                },
-              ),
-              ElevatedButton(
-                child: Text('Login'),
-                onPressed: () {
-                  _formKey.currentState.validate();
-
+      body: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            TextFormField(
+              controller: emailController,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Please enter your email';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              controller: passwordController,
+              obscureText: true,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Please enter your password';
+                }
+                return null;
+              },
+            ),
+            ElevatedButton(
+              child: Text('Login'),
+              onPressed: () {
+                if (_formKey.currentState.validate()) {
                   Credentials credentials = new Credentials(
                       emailController.text, passwordController.text);
 
                   attemptLogin(credentials).then((bool success) {
                     debugPrint('Login successful: ${success.toString()}');
+
+                    Navigator.pushNamed(context, '/');
                   });
-                },
-              ),
-              ElevatedButton(
-                child: Text('Register'),
-                onPressed: () {},
-              )
-            ],
-          ),
+                }
+              },
+            ),
+            ElevatedButton(
+              child: Text('Register'),
+              onPressed: () {
+                Navigator.pushNamed(context, '/register');
+              },
+            )
+          ],
         ),
       ),
     );
